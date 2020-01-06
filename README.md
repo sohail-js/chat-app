@@ -1,4 +1,4 @@
-# Chat UI
+# Chat Application in Angular
 
 Web Socket based chat application in Angular.
 
