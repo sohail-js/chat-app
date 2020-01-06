@@ -1,0 +1,76 @@
+<!-- <h2>Salam</h2>
+<hr>
+<input type="text" [(ngModel)]="message" placeholder="Message">
+<input type="number" [(ngModel)]="recepient" placeholder="Send to">
+<button (click)="send()">Send message</button> -->
+
+
+<div class="container">
+    <div class="row no-gutters h-100">
+        <div class="col-md-4 users">
+            <div class="toolbar">
+                <div class="app-name">ChatZ</div>
+                <div class="menu" ngbDropdown>
+                    <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem>Logout</button>
+                    </div>
+                </div>
+            </div>
+            <div class="search">
+                <input type="text" placeholder="Search" class="form-control form-control-dark form-control-sm">
+            </div>
+            <div class="list">
+                <div class="user" *ngFor="let user of users" (click)="activeUser = user"
+                    [ngClass]="{'active':activeUser == user}">
+                    <div class="name">
+                        <div class="full-name">
+                            {{user.fullName}}
+                        </div>
+                        <div class="user-name">
+                            @{{user.userName}}
+                        </div>
+                    </div>
+                    <div class="badge badge-light badge-pill unread-count">
+                        {{getUnreadCount(user.messages)}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 chat-window">
+            <div class="toolbar">
+                <div>
+                    {{activeUser.fullName}}
+                </div>
+                <div class="menu" ngbDropdown>
+                    <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem>Logout</button>
+                    </div>
+                </div>
+            </div>
+            <div class="messages">
+                <div class="message" *ngFor="let message of activeUser.messages" [ngClass]="message.direction">
+                    <div class="received-at">
+                        {{message.receivedAt}}
+                    </div>
+                    <div class="text">
+                        {{message.message}}
+                    </div>
+                </div>
+            </div>
+            <div class="send">
+                <textarea type="text" class="form-control form-control-dark" [(ngModel)]="message"
+                    placeholder="Enter message"></textarea>
+
+                <button class="btn" (click)="send()">
+                    <i class="mdi mdi-send"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
