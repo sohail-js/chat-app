@@ -1,0 +1,16 @@
+<div class="search">
+    <input type="text" [(ngModel)]="searchInput" (keyup)="search()" placeholder="Search"
+        class="form-control form-control-dark form-control-sm">
+</div>
+<div class="list">
+    <div class="user" *ngFor="let user of users" (click)="userClicked(user)">
+        <div class="name">
+            <div class="full-name">
+                {{user.name}}
+            </div>
+            <div class="user-name">
+                @{{user.username}}
+            </div>
+        </div>
+    </div>
+</div>

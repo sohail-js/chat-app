@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const User = require('../models/user').User;
 const bcrypt = require('bcrypt');
 
 
@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
         })
 
         const newUser = await user.save();
-        res.status(201).json({ success: true, message: "Registration success!", data: newUser });
+        res.status(201).json({ success: true, message: "Registration success!" });
     } catch (err) {
         res.status(400).json({ success: false, message: "Unable to register", data: err.message })
     }

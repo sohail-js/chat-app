@@ -15,22 +15,20 @@
                         <i class="mdi mdi-dots-vertical"></i>
                     </button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem>Logout</button>
+                        <button ngbDropdownItem (click)="logout()">Logout</button>
                     </div>
                 </div>
             </div>
-            <div class="search">
-                <input type="text" placeholder="Search" class="form-control form-control-dark form-control-sm">
-            </div>
+            <search-users (select)="activeUser = $event"></search-users>
             <div class="list">
                 <div class="user" *ngFor="let user of users" (click)="activeUser = user"
                     [ngClass]="{'active':activeUser == user}">
                     <div class="name">
                         <div class="full-name">
-                            {{user.fullName}}
+                            {{user.name}}
                         </div>
                         <div class="user-name">
-                            @{{user.userName}}
+                            @{{user.username}}
                         </div>
                     </div>
                     <div class="badge badge-light badge-pill unread-count">
@@ -42,7 +40,7 @@
         <div class="col-md-8 chat-window">
             <div class="toolbar">
                 <div>
-                    {{activeUser.fullName}}
+                    {{activeUser.name}}
                 </div>
                 <div class="menu" ngbDropdown>
                     <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
@@ -56,7 +54,7 @@
             <div class="messages">
                 <div class="message" *ngFor="let message of activeUser.messages" [ngClass]="message.direction">
                     <div class="received-at">
-                        {{message.receivedAt}}
+                        {{message.date}}
                     </div>
                     <div class="text">
                         {{message.message}}

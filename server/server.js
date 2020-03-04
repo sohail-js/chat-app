@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const socket = require('./socket');
+const cors = require('cors');
 
 // Start chat server
 socket();
@@ -15,6 +16,7 @@ const db = mongoose.connection;
 
 // JSON
 app.use(express.json());
+app.use(cors());
 
 // Route: /users
 const users = require('./routes/users');

@@ -1,7 +1,7 @@
 
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const User = require('../models/user').User;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -29,6 +29,7 @@ router.post('/login', async (req, res) => {
 
             res.status(200).json({
                 success: true, data: {
+                    id: user._id,
                     username: user.username,
                     name: user.name,
                     accessToken

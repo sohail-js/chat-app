@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  CHAT_URL: 'ws://localhost:8282/'
+  CHAT_URL: 'ws://localhost:3001/',
+  API_ENDPOINT: 'http://localhost:3000/'
 };
 
 /*

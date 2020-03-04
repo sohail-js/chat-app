@@ -1,1 +1,27 @@
-<p>auth works!</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form (ngSubmit)="register()">
+                <input type="text" class="form-control" [(ngModel)]="registerObj.name" name="name"
+                    placeholder="Your Name">
+                <input type="text" class="form-control" [(ngModel)]="registerObj.username" name="username"
+                    placeholder="Username">
+                <input type="password" class="form-control" [(ngModel)]="registerObj.password" name="password"
+                    placeholder="Password">
+                <input type="password" class="form-control" [(ngModel)]="registerObj.confirmPassword"
+                    name="confirmPassword" placeholder="Confirm Password">
+
+                <button class="btn btn-primary" type="submit">Register</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form (ngSubmit)="login()">
+                <input type="text" class="form-control" [(ngModel)]="loginObj.username" name="username"
+                    placeholder="Username">
+                <input type="password" class="form-control" [(ngModel)]="loginObj.password" name="password"
+                    placeholder="Password">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+</div>

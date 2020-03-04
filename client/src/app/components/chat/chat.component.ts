@@ -1,50 +1,70 @@
-import { Component, OnInit } from '@angular/core';
-import { ChatService } from 'src/app/chat.service';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { WebsocketService } from '../../services/websocket.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ChatComponent {
   title = 'chat-ui';
   recepient;
   message;
-  userData = JSON.parse(localStorage.getItem('userData'));
-  constructor(private chatService: ChatService) {
-    chatService.message.subscribe(msg => {
-      console.log("Response from WS server: ", msg);
-      this.activeUser.messages.push({
-        direction: "from",
-        message: msg.message,
-        receivedAt: new Date().toLocaleTimeString()
-      });
-    })
+  userDetails;
+  constructor(
+    private wsService: WebsocketService,
+    private configService: ConfigService
+  ) {
+    this.userDetails = configService.getUserDetails();
+    // chatService.message.subscribe(msg => {
+    //   console.log("Response from WS server: ", msg);
+    //   this.activeUser.messages.push({
+    //     direction: "from",
+    //     message: msg.message,
+    //     date: new Date().toLocaleTimeString()
+    //   });
+    // })
 
-    console.log("User Data >>> ", this.userData);
+    // console.log("User Data >>> ", this.userData);
   }
 
   send() {
-    console.log("Sending message:", this.message, "to:", this.activeUser.userId);
+    console.log("Sending message:", this.message, "to:", this.activeUser._id);
 
     // Send message
-    this.chatService.message.next({
-      user_id: this.userData.userId,
-      recipient_id: this.activeUser.userId,
-      type: 'chat',
-      token: null,
-      message: this.message
+    this.wsService.emit('send-message', {
+      // from: this.userDetails.id,
+      to: this.activeUser._id,
+      // direction: "to",
+      message: this.message,
+      // date,
+      // isRead,
+      // type
     })
 
-    // Update messages arry
-    this.activeUser.messages.push({
-      direction: "to",
-      message: this.message,
-      receivedAt: new Date().toLocaleTimeString()
-    });
+    // Update messages array
+    if (this.activeUser.messages)
+      this.activeUser.messages.push({
+        direction: "to",
+        message: this.message,
+        date: new Date().toLocaleTimeString()
+      });
+
+    else
+      this.activeUser.messages = [{
+        direction: "to",
+        message: this.message,
+        date: new Date().toLocaleTimeString()
+      }];
+
 
     // Empty message input
     this.message = "";
+
+    // If user not in list, add
+    // if(this.activeUser)
   }
 
   getUnreadCount(messages) {
@@ -53,45 +73,30 @@ export class ChatComponent {
 
   activeUser
   ngOnInit() {
-    this.activeUser = this.users[0];
+    this.activeUser = {};
+    // this.wsService.listen('chat-messsage').subscribe((data) => {
+    //   console.log(data);
+    // })
+
+    this.wsService.listen('chat-messages').subscribe((data: any) => {
+      console.log(data);
+      // const user = this.users.find((x: any) => x._id == data.from);
+    })
+
+    this.wsService.listen('get-chat-messages').subscribe((data: any) => {
+      console.log(data);
+      this.users = data;
+      // const user = this.users.find((x: any) => x._id == data.from);
+    })
+
+
+    // Get chat messages
+    this.wsService.emit('get-chat-messages', "");
   }
 
-  users = [
-    {
-      userId: 84,
-      userName: "kamran",
-      fullName: "Muhammad Kamran",
-      messages: [
-        {
-          direction: "from",
-          message: "Salam bro!",
-          receivedAt: "2:15PM",
-          isRead: false
-        },
-        {
-          direction: "to",
-          message: "Wassalam bro!",
-          receivedAt: "2:15PM"
-        },
-      ]
-    },
-    {
-      userId: 2,
-      userName: "saeed",
-      fullName: "Muhammad Saeed",
-      messages: [
-        {
-          direction: "from",
-          message: "Heyy Salam bro!",
-          receivedAt: "3:15PM",
-          isRead: false
-        },
-        {
-          direction: "to",
-          message: "Woah! Wassalam bro!",
-          receivedAt: "3:16PM"
-        },
-      ]
-    },
-  ]
+  users;
+
+  logout() {
+    this.configService.logout();
+  }
 }
