@@ -4,14 +4,15 @@ const Message = new mongoose.Schema({
     direction: { type: String, required: true },
     message: { type: String, required: true },
     date: { type: Date, required: true, default: Date.now() },
-    isRead: { type: Boolean, required: true, default: false },
+    // isRead: { type: Boolean, required: true, default: false },
     type: { type: String, required: true, default: "message" }
 })
 
 const Chat = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
     messages: [Message],
-    lastUpdated: { type: Date, required: true }
+    lastUpdated: { type: Date, required: true },
+    unReadCount: { type: Number, default: 0 }
 });
 
 const User = mongoose.model('users', new mongoose.Schema({

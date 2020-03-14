@@ -19,20 +19,20 @@
                     </div>
                 </div>
             </div>
-            <search-users (select)="activeUser = $event"></search-users>
+            <search-users (select)="activeChat = $event"></search-users>
             <div class="list">
-                <div class="user" *ngFor="let user of users" (click)="activeUser = user"
-                    [ngClass]="{'active':activeUser == user}">
+                <div class="user" *ngFor="let chat of chats" (click)="setActiveChat(chat)"
+                    [ngClass]="{'active':activeChat == chat}">
                     <div class="name">
                         <div class="full-name">
-                            {{user.name}}
+                            {{chat.user.name}}
                         </div>
                         <div class="user-name">
-                            @{{user.username}}
+                            @{{chat.user.username}}
                         </div>
                     </div>
                     <div class="badge badge-light badge-pill unread-count">
-                        {{getUnreadCount(user.messages)}}
+                        {{getUnreadCount(chat.messages)}}
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         <div class="col-md-8 chat-window">
             <div class="toolbar">
                 <div>
-                    {{activeUser.name}}
+                    {{activeChat.name}}
                 </div>
                 <div class="menu" ngbDropdown>
                     <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="messages">
-                <div class="message" *ngFor="let message of activeUser.messages" [ngClass]="message.direction">
+                <div class="message" *ngFor="let message of activeChat.messages" [ngClass]="message.direction">
                     <div class="received-at">
                         {{message.date}}
                     </div>

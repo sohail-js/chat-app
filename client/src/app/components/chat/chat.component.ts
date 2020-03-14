@@ -20,7 +20,7 @@ export class ChatComponent {
     this.userDetails = configService.getUserDetails();
     // chatService.message.subscribe(msg => {
     //   console.log("Response from WS server: ", msg);
-    //   this.activeUser.messages.push({
+    //   this.activeChat.messages.push({
     //     direction: "from",
     //     message: msg.message,
     //     date: new Date().toLocaleTimeString()
@@ -31,12 +31,12 @@ export class ChatComponent {
   }
 
   send() {
-    console.log("Sending message:", this.message, "to:", this.activeUser._id);
+    console.log("Sending message:", this.message, "to:", this.activeChat.user._id);
 
     // Send message
     this.wsService.emit('send-message', {
       // from: this.userDetails.id,
-      to: this.activeUser._id,
+      to: this.activeChat.user._id,
       // direction: "to",
       message: this.message,
       // date,
@@ -45,35 +45,37 @@ export class ChatComponent {
     })
 
     // Update messages array
-    if (this.activeUser.messages)
-      this.activeUser.messages.push({
-        direction: "to",
-        message: this.message,
-        date: new Date().toLocaleTimeString()
-      });
+    if (!this.activeChat.messages) {
+      this.activeChat.messages = [];
+    }
+    this.activeChat.messages.push({
+      direction: "to",
+      message: this.message,
+      date: new Date().toLocaleTimeString()
+    });
 
-    else
-      this.activeUser.messages = [{
-        direction: "to",
-        message: this.message,
-        date: new Date().toLocaleTimeString()
-      }];
+    // else
+    //   this.activeChat.messages = [{
+    //     direction: "to",
+    //     message: this.message,
+    //     date: new Date().toLocaleTimeString()
+    //   }];
 
 
     // Empty message input
     this.message = "";
 
     // If user not in list, add
-    // if(this.activeUser)
+    // if(this.activeChat)
   }
 
   getUnreadCount(messages) {
     return messages ? messages.filter(x => x.direction == "from" && !x.isRead).length : 0
   }
 
-  activeUser
+  activeChat
   ngOnInit() {
-    this.activeUser = {};
+    this.activeChat = {};
     // this.wsService.listen('chat-messsage').subscribe((data) => {
     //   console.log(data);
     // })
@@ -84,8 +86,11 @@ export class ChatComponent {
     })
 
     this.wsService.listen('get-chat-messages').subscribe((data: any) => {
-      console.log(data);
-      this.users = data;
+      console.log("get-chat-messages", data);
+      this.chats = data;
+
+      if (this.activeChat.user)
+        this.activeChat = this.chats.find(c => c.user._id == this.activeChat.user._id)
       // const user = this.users.find((x: any) => x._id == data.from);
     })
 
@@ -94,9 +99,18 @@ export class ChatComponent {
     this.wsService.emit('get-chat-messages', "");
   }
 
-  users;
+  chats;
 
   logout() {
     this.configService.logout();
+  }
+
+  setActiveChat(chat) {
+    this.activeChat = chat;
+    console.log('message-read');
+    
+    this.wsService.emit('message-read', {
+      chatId: chat._id
+    })
   }
 }
