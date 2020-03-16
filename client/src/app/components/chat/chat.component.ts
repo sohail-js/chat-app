@@ -51,7 +51,7 @@ export class ChatComponent {
     this.activeChat.messages.push({
       direction: "to",
       message: this.message,
-      date: new Date().toLocaleTimeString()
+      date: new Date()
     });
 
     // else
@@ -75,7 +75,7 @@ export class ChatComponent {
 
   activeChat
   ngOnInit() {
-    this.activeChat = {};
+    // this.activeChat = {};
     // this.wsService.listen('chat-messsage').subscribe((data) => {
     //   console.log(data);
     // })
@@ -89,8 +89,10 @@ export class ChatComponent {
       console.log("get-chat-messages", data);
       this.chats = data;
 
-      if (this.activeChat.user)
+      if (this.activeChat) {
         this.activeChat = this.chats.find(c => c.user._id == this.activeChat.user._id)
+        this.transformMessages();
+      }
       // const user = this.users.find((x: any) => x._id == data.from);
     })
 
@@ -108,9 +110,26 @@ export class ChatComponent {
   setActiveChat(chat) {
     this.activeChat = chat;
     console.log('message-read');
-    
+    this.activeChat.unReadCount = 0;
+
+    this.transformMessages();
+
     this.wsService.emit('message-read', {
       chatId: chat._id
     })
+  }
+
+  transformMessages() {
+    // this.activeChat.messages.forEach((message, i) => {
+
+    // })
+    this.activeChat.messages[0].isDateChanged = true;
+    for (let i = 1; i < this.activeChat.messages.length; i++) {
+      let d1 = new Date(this.activeChat.messages[i].date);
+      let d2 = new Date(this.activeChat.messages[i - 1].date);
+      if (d1.getDate() > d2.getDate() || d1.getMonth() > d2.getMonth()) {
+        this.activeChat.messages[i].isDateChanged = true;
+      }
+    }
   }
 }

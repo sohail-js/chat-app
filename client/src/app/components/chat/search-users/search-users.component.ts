@@ -24,15 +24,15 @@ export class SearchUsersComponent implements OnInit {
   searchInput;
   users = [];
   userData;
-  search() {
+  search = this.configService.debounce(function () {
     this.chatService.searchUsers(this.searchInput || "-------").then((res: any) => {
       this.users = res.filter(x => x._id != this.userData.id);
       console.log(this.users);
     })
-  }
+  }, 500)
 
   userClicked(user) {
-    this.select.emit(user);
+    this.select.emit({ user });
     this.users = [];
     this.searchInput = "";
   }

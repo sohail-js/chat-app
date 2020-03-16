@@ -7,8 +7,8 @@
         {
             "type": "node",
             "request": "attach",
-            "name": "Attach",
-            "port": 9229,
+            "name": "Node",
+            "port": 3000,
             "skipFiles": [
                 "<node_internals>/**"
             ]
@@ -20,6 +20,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            // "port": 3000,
             "program": "${workspaceFolder}\\server.js"
         }
     ]

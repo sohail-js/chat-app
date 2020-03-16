@@ -28,4 +28,16 @@ export class ConfigService {
     this.secureLs.remove(this._USERDETAILS);
     this.router.navigate(['login']);
   }
+
+  debounce(fn, delay) {
+    let timeout;
+    return function () {
+      let context = this, args = arguments;
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        fn.call(context, args);
+      }, delay)
+    }
+  }
 }

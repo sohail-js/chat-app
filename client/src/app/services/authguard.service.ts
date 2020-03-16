@@ -21,7 +21,7 @@ export class AuthguardService {
 
     let userDetails = this.configService.getUserDetails();
 
-    if (route.url[0].path == "chat") {
+    if (["chat", "game"].includes(route.url[0].path)) {
       if (!userDetails) {
         this.router.navigate(['/login']);
         console.log("Login to continue.");

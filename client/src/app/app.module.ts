@@ -20,7 +20,7 @@ import { ChatService } from './components/chat/chat.service';
     AppComponent,
     ChatComponent,
     AuthComponent,
-    SearchUsersComponent
+    SearchUsersComponent,
   ],
   imports: [
     BrowserModule,

@@ -31,43 +31,51 @@
                             @{{chat.user.username}}
                         </div>
                     </div>
-                    <div class="badge badge-light badge-pill unread-count">
-                        {{getUnreadCount(chat.messages)}}
+                    <div class="badge badge-light badge-pill unread-count" [hidden]="chat.unReadCount == 0">
+                        {{chat.unReadCount}}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-8 chat-window">
-            <div class="toolbar">
-                <div>
-                    {{activeChat.name}}
-                </div>
-                <div class="menu" ngbDropdown>
-                    <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
-                        <i class="mdi mdi-dots-vertical"></i>
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem>Logout</button>
+        <div class="col-md-8">
+            <div class=" chat-window" *ngIf="activeChat">
+                <div class="toolbar">
+                    <div>
+                        {{activeChat.user?.name}}
+                    </div>
+                    <div class="menu" ngbDropdown>
+                        <button class="btn p-0" id="dropdownBasic1" ngbDropdownToggle>
+                            <i class="mdi mdi-dots-vertical"></i>
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button ngbDropdownItem [routerLink]="['/game/'+activeChat.user._id]">Challenge a
+                                Game</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="messages">
-                <div class="message" *ngFor="let message of activeChat.messages" [ngClass]="message.direction">
-                    <div class="received-at">
-                        {{message.date}}
-                    </div>
-                    <div class="text">
-                        {{message.message}}
-                    </div>
+                <div class="messages">
+                    <ng-container *ngFor="let message of activeChat.messages; let i = index">
+                        <div class="text-center date-day" *ngIf="message.isDateChanged">
+                            {{message.date | date}}
+                        </div>
+                        <div class="message" [ngClass]="message.direction">
+                            <div class="received-at">
+                                {{message.date | date : 'shortTime'}}
+                            </div>
+                            <div class="text">
+                                {{message.message}}
+                            </div>
+                        </div>
+                    </ng-container>
                 </div>
-            </div>
-            <div class="send">
-                <textarea type="text" class="form-control form-control-dark" [(ngModel)]="message"
-                    placeholder="Enter message"></textarea>
+                <div class="send">
+                    <textarea type="text" class="form-control form-control-dark" [(ngModel)]="message"
+                        placeholder="Enter message"></textarea>
 
-                <button class="btn" (click)="send()">
-                    <i class="mdi mdi-send"></i>
-                </button>
+                    <button class="btn" (click)="send()" [disabled]="!message">
+                        <i class="mdi mdi-send"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

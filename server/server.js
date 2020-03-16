@@ -10,7 +10,10 @@ const cors = require('cors');
 socket();
 
 // Connect to mongodb
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
+    .catch(err => {
+        console.log("Error connecting to db dude...", err)
+    });
 const db = mongoose.connection;
 
 
