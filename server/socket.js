@@ -160,7 +160,8 @@ function startServer() {
 
                         // Send message to opponent
                         sendMessage({
-                            message: `Hey! lets play a game. :D, join this sessionId: ${data.sessionId}`,
+                            message: `Hey! lets play a game :D
+                            Join my game <a href="http://localhost:4200/game/${data.sessionId}/tic-tac-toe">here</a> `,
                             to: data.to
                         })
                         console.log("game created");
@@ -196,6 +197,32 @@ function startServer() {
             }
         })
 
+        function checkWinner(board) {
+
+            // horizontal
+            for (let i = 0; i < 3; i++) {
+                if (board[i][0] == board[i][1] && board[i][0] == board[i][2]) {
+                    return board[i][0]
+                }
+            }
+
+            // vertical
+            for (let i = 0; i < 3; i++) {
+                if (board[0][i] == board[1][i] && board[0][i] == board[2][i]) {
+                    return board[0][i]
+                }
+            }
+
+            // diagonal
+            if (board[0][0] == board[1][1] && board[0][0] == board[2][2]) {
+                return board[0][0];
+            }
+            else if (board[2][0] == board[1][1] && board[2][0] == board[0][2]) {
+                return board[2][0];
+            }
+
+            return null;
+        }
         // Game move
         socket.on('game-move', data => {
             switch (data.action) {
@@ -209,6 +236,15 @@ function startServer() {
                     let gameData = {
                         action: 'gameSession', sessionData: gameSessions[data.sessionId].gameData
                     };
+
+                    let winner = checkWinner(gameSessions[data.sessionId].gameData);
+
+                    if (winner) {
+                        gameData = {
+                            action: 'gameOver', winner: winner == 'X' ? gameSessions[data.sessionId].creator : gameSessions[data.sessionId].opponent
+                        }
+                    }
+
                     // Send updated game data to both the users
                     io.to(activeUsers[gameSessions[data.sessionId].creator]).emit('game-move', gameData);
                     io.to(activeUsers[gameSessions[data.sessionId].opponent]).emit('game-move', gameData);

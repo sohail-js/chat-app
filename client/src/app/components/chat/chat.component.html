@@ -62,8 +62,7 @@
                             <div class="received-at">
                                 {{message.date | date : 'shortTime'}}
                             </div>
-                            <div class="text">
-                                {{message.message}}
+                            <div class="text" [innerHTML]="message.message">
                             </div>
                         </div>
                     </ng-container>

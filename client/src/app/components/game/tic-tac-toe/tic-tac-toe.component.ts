@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from 'src/app/services/websocket.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfigService } from 'src/app/services/config.service';
 
 @Component({
   selector: 'app-tic-tac-toe',
@@ -12,7 +13,8 @@ export class TicTacToeComponent implements OnInit {
   constructor(
     private wsService: WebsocketService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private configService: ConfigService
   ) { }
 
   status: String = '';
@@ -64,6 +66,10 @@ export class TicTacToeComponent implements OnInit {
         case 'gameSession':
 
           this.sessionData = data.sessionData;
+          console.log("SessionData >> ", this.sessionData);
+          break;
+        case 'gameOver':
+          this.status = `You ${data.winner == this.configService.getUserDetails().id ? 'won ^_^' : 'lost :('}`
           console.log("SessionData >> ", this.sessionData);
           break;
       }

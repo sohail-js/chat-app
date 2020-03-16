@@ -3,21 +3,21 @@
 <h2>{{status}}</h2>
 
 <div *ngIf="sessionData" class="game">
-    {{sessionData}}
+    <!-- {{sessionData}} -->
 
     <div>
-        <button (click)="sendMove(0,0)">[{{sessionData[0][0]}}]</button>
-        <button (click)="sendMove(0,1)">[{{sessionData[0][1]}}]</button>
-        <button (click)="sendMove(0,2)">[{{sessionData[0][2]}}]</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(0,0)">{{sessionData[0][0]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(0,1)">{{sessionData[0][1]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(0,2)">{{sessionData[0][2]}}</button>
     </div>
     <div>
-        <button (click)="sendMove(1,0)">[{{sessionData[1][0]}}]</button>
-        <button (click)="sendMove(1,1)">[{{sessionData[1][1]}}]</button>
-        <button (click)="sendMove(1,2)">[{{sessionData[1][2]}}]</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(1,0)">{{sessionData[1][0]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(1,1)">{{sessionData[1][1]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(1,2)">{{sessionData[1][2]}}</button>
     </div>
     <div>
-        <button (click)="sendMove(2,0)">[{{sessionData[2][0]}}]</button>
-        <button (click)="sendMove(2,1)">[{{sessionData[2][1]}}]</button>
-        <button (click)="sendMove(2,2)">[{{sessionData[2][2]}}]</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(2,0)">{{sessionData[2][0]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(2,1)">{{sessionData[2][1]}}</button>
+        <button class="btn btn-outline-primary" (click)="sendMove(2,2)">{{sessionData[2][2]}}</button>
     </div>
 </div>
